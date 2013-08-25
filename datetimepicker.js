@@ -397,7 +397,7 @@
 
                                     options.element.val( valueString );
 
-                                    altField.val(d.dateYearValue+'-'+d.dateMonthValue+'-'+d.dateDayValue +' '+ (+hoursValue + (amOrPm == 'pm' ? 12 : 0)) +':'+ minutesValue );
+                                    altField.val(d.dateYearValue+'-'+(+d.dateMonthValue+1)+'-'+d.dateDayValue +' '+ (+hoursValue + (amOrPm == 'pm' ? 12 : 0)) +':'+ minutesValue );
 
                                     hide();
             }
