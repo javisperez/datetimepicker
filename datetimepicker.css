@@ -1,0 +1,130 @@
+.datepicker-container {
+    display: none;
+    position: absolute;
+    background: #314559;
+    padding: 2px;
+    margin: 0;
+    font-family: Arial, Helvetica, Sans-serif;
+    font-size: 12px;
+    color: #FFF;
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.datepicker-container > div {
+    float: left;
+}
+
+.datepicker-container table {
+    margin: 0;
+    padding: 0;
+}
+
+.date-container td {
+    background-color: #FFF;
+    color: #314559;
+    height: 28px;
+    width: 28px;
+    border-left: 1px solid #efdbd6;
+    border-bottom: 1px solid #efdbd6;
+    vertical-align: middle;
+}
+
+.date-container .year {
+    font-weight: bold;
+    cursor: defualt;
+}
+
+.date-container tr:first-child td {
+    cursor: pointer;
+    text-align: center;
+}
+
+.date-container .today {
+    background-color: #C1DBEE;;
+    font-weight: bold;
+}
+
+.date-container .date {
+    cursor: pointer;
+}
+
+.date-container .date:hover,
+.date-container .date.selected {
+    background-color: #ECD166;
+}
+
+.time-container {
+    vertical-align: top;
+    margin: 6px 6px 0 10px;
+}
+.time-container .stepper {
+    text-align: center;
+    padding: 4px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    background: rgb(74, 104, 119);
+    color: rgb(154, 186, 190);    
+}
+
+.time-container .stepper:active,
+.date-container tr:first-child > td:active {
+    opacity: .4;
+}
+
+.time-container td {
+    min-width: 10px;
+}
+
+.time-container .minutes-container {
+    position: relative;
+}
+
+.time-container input {
+    outline: none;
+    border: none;
+    background: rgb(74, 104, 119);
+    padding: 0 10px;
+    color: #BBB;
+    position: static;
+    width: 76px;
+    font-size: 68px;
+    letter-spacing: -7px;
+}
+
+.time-container input:focus {
+    padding: 0 10px;
+    background: rgb(74, 104, 119);
+}
+
+.time-container .amPm {
+    font-size: 18px;
+    padding: 4px;
+    padding-bottom: 16px;
+    vertical-align: bottom;
+    color: #FFF;
+    position: absolute;
+    font-weight: normal;
+    right: 0;
+    bottom: 0;
+}
+
+.time-container input[name=minutes] {
+    padding-right: 30px;
+}
+
+.time-container button {
+    font-size: 18px;
+    color: #666;
+    background: #cfe7fa;
+    border: 0 solid;
+    width: 100%;
+    padding: 10px 0 9px 0;
+    cursor: pointer;
+}
