@@ -119,6 +119,10 @@
     padding-right: 30px;
 }
 
+.time-container .military-format input[name=minutes] {
+    padding-right: 0;
+}
+
 .time-container button {
     font-size: 18px;
     color: #666;
@@ -128,3 +132,4 @@
     padding: 10px 0 9px 0;
     cursor: pointer;
 }
+

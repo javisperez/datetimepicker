@@ -10,9 +10,9 @@
             startDate    : null,
             onChange     : null,
             element      : this,
-            altElement   : null,
             daysLabel    : ['S','M','T','W','T','F','S'],
-            monthsLabel  : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dec']
+            monthsLabel  : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dec'],
+            timerFormat  : 12 // or 24
         }
 
         options = $.extend({}, defaults, options);
@@ -272,7 +272,7 @@
             tdPlus.onclick = function() {
                 var currentHour = hours.value;
 
-                if(currentHour == 11) {
+                if(currentHour == 11 && options.timerFormat != 24) {
                     var $amPm = $(timeContainer).find('.amPm');
                     var currentAmPm = $amPm.text();
 
@@ -285,7 +285,11 @@
                     $amPm.text(currentAmPm);
                 }
 
-                currentHour = currentHour == 12 ? 1 : +hours.value+1;
+                if(options.timerFormat != 24) {
+                    currentHour = currentHour == 12 ? 1 : +hours.value+1;
+                } else {
+                    currentHour = currentHour == 23 ? 0 : +hours.value+1;
+                }
 
                 hours.value = pad(currentHour);
             }
@@ -294,7 +298,7 @@
 
                 var currentHour = hours.value;
 
-                if(currentHour == 12) {
+                if(currentHour == 12 && options.timerFormat != 24) {
                     var $amPm = $(timeContainer).find('.amPm');
                     var currentAmPm = $amPm.text();
 
@@ -307,7 +311,11 @@
                     $amPm.text(currentAmPm);
                 }
 
-                currentHour = currentHour == 1 ? 12 : +hours.value-1;
+                if(options.timerFormat != 24) {
+                    currentHour = currentHour == 1 ? 12 : +hours.value-1;
+                } else {
+                    currentHour = currentHour == 0 ? 23 : +hours.value-1;
+                }
 
                 hours.value = pad(currentHour);
             }
@@ -339,12 +347,16 @@
             tr.appendChild(td.cloneNode(false));
 
             var td2 = td.cloneNode(false);
-            td2.className = 'minutes-container';
+            td2.className = 'minutes-container ' + (options.timerFormat == 24 ? 'military-format' : '');
             td2.appendChild(minutes);
 
             var span = ce('span');
-            span.innerHTML = 'pm';
-            span.className = 'amPm';
+
+            if(options.timerFormat != 24) {
+                span.innerHTML = 'pm';
+                span.className = 'amPm';
+            }
+
             td2.appendChild(span);
             tr.appendChild(td2); // minutes input
 
@@ -393,11 +405,18 @@
                                         valueString += options.monthsLabel[d.dateMonthValue] +', ';
                                         valueString += d.dateYearValue +' @ ';
                                         valueString += hoursValue +':'+ minutesValue+' ';
+                                        
+                                    if(options.timerFormat != 24) {
                                         valueString += amOrPm.toUpperCase();
+                                    }
 
                                     options.element.val( valueString );
 
-                                    altField.val(d.dateYearValue+'-'+(+d.dateMonthValue+1)+'-'+d.dateDayValue +' '+ (+hoursValue + (amOrPm == 'pm' ? 12 : 0)) +':'+ minutesValue );
+                                    if(options.timerFormat != 24) {
+                                        altField.val(d.dateYearValue+'-'+(+d.dateMonthValue+1)+'-'+d.dateDayValue +' '+ (+hoursValue + (amOrPm == 'pm' ? 12 : 0)) +':'+ minutesValue );
+                                    } else {
+                                        altField.val(d.dateYearValue+'-'+(+d.dateMonthValue+1)+'-'+d.dateDayValue +' '+ hoursValue +':'+ minutesValue );
+                                    }
 
                                     hide();
             }
