@@ -25,13 +25,13 @@ The current options supported are:
 
 Example of use
 ==============
-
+```
   $('#datetime').datetimepicker({
     onChange : fn,
     daysLabel : ['D','L','M','M','J','V','S'],
     monthsLabel : ['E','F','M','A','M','J','J','A','S','O','N','D']
   });
-
+```
 
 If you need any new functionality or something that this plugin currently doesnt support, feel free to fork it and let me know i'd love to check it out!
 
