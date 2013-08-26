@@ -413,9 +413,9 @@
                                     options.element.val( valueString );
 
                                     if(options.timerFormat != 24) {
-                                        altField.val(d.dateYearValue+'-'+(+d.dateMonthValue+1)+'-'+d.dateDayValue +' '+ (+hoursValue + (amOrPm == 'pm' ? 12 : 0)) +':'+ minutesValue );
+                                        altField.val(d.dateYearValue+'-'+(+d.dateMonthValue+1)+'-'+d.dateDayValue +' '+ (+hoursValue + (amOrPm == 'pm' ? 12 : 0)) +':'+ minutesValue+':00' );
                                     } else {
-                                        altField.val(d.dateYearValue+'-'+(+d.dateMonthValue+1)+'-'+d.dateDayValue +' '+ hoursValue +':'+ minutesValue );
+                                        altField.val(d.dateYearValue+'-'+(+d.dateMonthValue+1)+'-'+d.dateDayValue +' '+ hoursValue +':'+ minutesValue+':00' );
                                     }
 
                                     hide();
