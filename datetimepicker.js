@@ -5,8 +5,8 @@
     function Datetimepicker(options) {
 
         var defaults = {
-            minDate   : '2012-05-04',
-            maxDate   : 3,
+            minDate   : 24,
+            maxDate   : 24,
             startDate    : null,
             onChange     : null,
             element      : this,
