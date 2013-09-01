@@ -5,8 +5,8 @@
     function Datetimepicker(options) {
 
         var defaults = {
-            backMonths   : 36,
-            fowardMonths : 36,
+            minDate   : '2012-05-04',
+            maxDate   : 3,
             startDate    : null,
             onChange     : null,
             element      : this,
@@ -24,8 +24,6 @@
         var ce         = function($element) {
                             return d.createElement.call(d, $element);
                          }
-        var backMonths = 0;
-        var fwdMonths  = 0;
         var date       = !options.startDate ? new Date() : new Date(options.startDate);    
         var isMouseDown= false;
         var navTimer   = null;
@@ -36,6 +34,40 @@
         var currentHour = 8;
         var currentMinute = 0;
         var altField = null;
+		
+		if (options.minDate == 'today') {
+			options.minDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+		} else {
+			if(!/^(\d{4})-(\d{1,2})-(\d{1,2})$/.test(options.minDate)) {
+				var tmpDate = new Date(today);
+	
+				if (typeof options.minDate == 'number') {
+					tmpDate.setMonth( today.getMonth() - options.minDate );
+				} else {
+					tmpDate.setMonth( today.getMonth() - defaults.minDate );
+				}
+				
+				options.minDate = tmpDate.getFullYear()+'-'+(tmpDate.getMonth()+1)+'-'+tmpDate.getDate();
+			}
+		}
+
+		if (options.maxDate == 'today') {
+			options.maxDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+		} else {
+			if(!/^(\d{4})-(\d{1,2})-(\d{1,2})$/.test(options.maxDate)) {
+				var tmpDate = new Date(today);
+	
+				if (typeof options.maxDate == 'number') {
+					tmpDate.setMonth( today.getMonth() + options.maxDate );
+				} else {
+					tmpDate.setMonth( today.getMonth() + defaults.maxDate );
+				}
+				options.maxDate = tmpDate.getFullYear()+'-'+(tmpDate.getMonth()+1)+'-'+tmpDate.getDate();
+			}
+		}
+
+		var minLimits = options.minDate.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+		var maxLimits = options.maxDate.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
 
         dateContainer.className = 'date-container';
         timeContainer.className = 'time-container';
@@ -79,16 +111,13 @@
 
         // Go to a relative month (-1 = previous, 1 = next)
         function gotoMonth(index, recursive) {
-            if(index == -1 && backMonths >= options.backMonths) {
-                return;
-            }
-
-            if(index == 1 && fwdMonths >= options.fowardMonths) {
-                return;
-            }
-
-            backMonths -= index;
-            fwdMonths  += index;
+			if (index == -1 && (+date.getMonth()+1 == minLimits[2] && date.getFullYear() == minLimits[1])) {
+				return;
+			} else
+			if (index == 1 && (+date.getMonth()+1 == maxLimits[2] && date.getFullYear() == maxLimits[1])) {
+				return;
+			}
+			
 
             date.setDate(1);
             date.setMonth(date.getMonth()+index);
@@ -176,6 +205,9 @@
                         isToday = today.getDate() == currentDate;
                         isToday = isToday && today.getMonth()    == date.getMonth();
                         isToday = isToday && today.getFullYear() == date.getFullYear();
+						
+						var isInMinLimit = date.getFullYear() == minLimits[1] && date.getMonth()+1  == minLimits[2];
+						var isInMaxLimit = date.getFullYear() == maxLimits[1] && date.getMonth()+1  == maxLimits[2];
 
                         if(isToday) {
                             td.className = 'today';
@@ -183,16 +215,23 @@
 
                         td.className += ' date';
 
-                        td.dataset.dateYearValue  = date.getFullYear();
+                        $(td).attr('data-date-year-value', date.getFullYear());
 
-                        td.dataset.dateMonthValue = date.getMonth();
+                        $(td).attr('data-date-month-value', date.getMonth());
 
-                        td.dataset.dateDayValue   = currentDate;
+                        $(td).attr('data-date-day-value', currentDate);
+
+						if ((isInMinLimit && currentDate < minLimits[3]) || (isInMaxLimit && currentDate > maxLimits[3])) {
+								td.className += ' disabled';
+						}
 
                         td.innerHTML = currentDate++;
 
                         // When clicking on each date td, deselect any previous one, and select the clicked one
                         td.onclick = function() {
+							if ($(this).hasClass('disabled')) {
+								return;
+							}
                             selectDate(this);
                         }
                     }
