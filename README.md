@@ -14,14 +14,15 @@ I havent found all bugs yet, but if you see any please let me know, i'll be happ
 
 The current options supported are:
 
-- backMonths : the max number of months than a user can go back
-- fwdMonths : the max number of months than a user can seek foward
+- minDate : the minimal date that a user can go back. This method replaces the old "backMonths" and expects a string YYYY-MM-DD type
+- maxDate : the max date a user can go foward and replaces the old "fowardMonths" method. Expects a string YYYY-MM-DD type
 - startDate : the default date of the datetimepicker
 - onChange  : a callback to execute whenever the user changes the date (goes to another month)
 - daysLabel : an array of days label to display (like Sunday, Monday, etc)
 - monthsLabel : an array with the label of the months
 - timerFormat : the format of the time picker, if 12 hours or 24 (military)
 
+When the minDate and maxDate are given integer values (like 24), it uses that numbers as months to constrain.
 
 Example of use
 ==============
