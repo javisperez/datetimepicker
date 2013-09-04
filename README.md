@@ -24,6 +24,8 @@ The current options supported are:
 
 When the minDate and maxDate are given integer values (like 24), it uses that numbers as months to constrain.
 
+Also, you can set a data-start-date parameter in your input (#datetime in the example), and that date will be used as start date.
+
 Example of use
 ==============
 ```
