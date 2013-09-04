@@ -1,3 +1,13 @@
+/**
+ * Datetime Picker v1.5
+ * 
+ * Copyright by Javis V. Perez
+ * http://www.javisperez.com
+ * 
+ * For example and more info:
+ * https://github.com/javisperez/datetimepicker
+ *
+ */
 (function ($) {
 
     $.fn.datetimepicker = Datetimepicker;
@@ -17,23 +27,33 @@
 
         options = $.extend({}, defaults, options);
 
+        var defaultTime = '8:00';
+
+        // If there's a start date in the dataset property
+        if(/^(\d{4})-(\d{1,2})-(\d{1,2})/.test($(this).attr('data-start-date'))) {
+            var splitted      = $(this).attr('data-start-date').split(' ');
+            options.startDate = splitted[0];
+            defaultTime       = splitted[1];
+        }
+
         /**
          * Variables
          */
         var d          = document;
         var ce         = function($element) {
                             return d.createElement.call(d, $element);
-                         }
-        var date       = !options.startDate ? new Date() : new Date(options.startDate);    
+                         };
+        var date       = !options.startDate ? new Date() : new Date(options.startDate);
         var isMouseDown= false;
         var navTimer   = null;
         var dateContainer = ce('div');
         var timeContainer = ce('div');
         var datepickerContainer = ce('div');
-        var today      = new Date();
-        var currentHour = 8;
-        var currentMinute = 0;
-        var altField = null;
+        var today         = new Date();
+        var currentHour   = parseInt(defaultTime.substr(0, defaultTime.indexOf(':')));
+        var currentMinute = parseInt(defaultTime.substr(defaultTime.indexOf(':')+1, 2));
+        var altField      = null;
+        var selectedDate  = new Date(date);
 		
 		if (options.minDate == 'today') {
 			options.minDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -118,7 +138,6 @@
 				return;
 			}
 			
-
             date.setDate(1);
             date.setMonth(date.getMonth()+index);
             date.setFullYear(date.getFullYear());
@@ -225,6 +244,10 @@
 								td.className += ' disabled';
 						}
 
+                        if (date.getFullYear() == selectedDate.getFullYear() && date.getMonth() == selectedDate.getMonth() && currentDate == selectedDate.getDate()){
+                            td.className += ' selected';
+                        }
+
                         td.innerHTML = currentDate++;
 
                         // When clicking on each date td, deselect any previous one, and select the clicked one
@@ -259,6 +282,8 @@
         // Select a date
         function selectDate(clickedCell) {
             $(dateContainer).find('td.selected').removeClass('selected');
+            
+            selectedDate = new Date(clickedCell.attr('data-date-year-value')+'-'+clickedCell.attr('data-date-month-value')+'-'+clickedCell.attr('data-date-day-value'));
 
             $(clickedCell).addClass('selected');
         }
@@ -505,8 +530,11 @@
             left:offset.left
         });
 
+
+        var defaultDateValue = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+pad(currentHour)+':'+pad(currentMinute)+':00';
+
         // Create the alt field to send the date format to
-        altField = $('<input type="hidden" name="'+element.attr('name')+'" id="datepickerAltField" />').insertAfter(element);
+        altField = $('<input type="hidden" name="'+element.attr('name')+'" value="'+defaultDateValue+'" id="datepickerAltField" />').insertAfter(element);
 
         element.attr('name', element.attr('name')+'-original');
 
