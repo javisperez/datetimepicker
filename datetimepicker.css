@@ -59,6 +59,14 @@
     background-color: #ECD166;
 }
 
+.date-container .disabled,
+.date-container .disabled:hover,
+.date-container .disabled.selected {
+	background-color: #FFF;
+	color: #E0E0E0;
+	cursor: default;
+}
+
 .time-container {
     vertical-align: top;
     margin: 6px 6px 0 10px;
