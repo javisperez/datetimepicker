@@ -322,10 +322,10 @@
                 table.cellSpacing = 0;
                 table.cellPadding = 0;
 
-                tdPlus.innerHTML  = '+';        
-                tdMinus.innerHTML = '-';
-                tdPlusMinutes.innerHTML  = '+';
-                tdMinusMinutes.innerHTML = '-';
+                tdPlus.innerHTML  = '&#9650;';
+                tdMinus.innerHTML = '&#9660;';
+                tdPlusMinutes.innerHTML  = '&#9650;';
+                tdMinusMinutes.innerHTML = '&#9660;';
 
                 tdPlus.className = 'stepper';
                 tdMinus.className = 'stepper';
@@ -451,7 +451,7 @@
 
                 var setButton = ce('button');
 
-                setButton.innerHTML = 'DONE';
+                setButton.innerHTML = 'SET';
 
                 setButton.onclick = function() {
 
@@ -556,4 +556,3 @@
     }
     
 })(jQuery);
-

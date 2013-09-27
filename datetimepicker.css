@@ -1,8 +1,12 @@
+
+
+
+
 .datepicker-container {
     display: none;
     position: absolute;
-    background: #314559;
-    padding: 2px;
+    background: rgb(255, 255, 255);
+    padding: 0;
     margin: 0;
     font-family: Arial, Helvetica, Sans-serif;
     font-size: 12px;
@@ -14,6 +18,7 @@
     -moz-user-select: -moz-none;
     -ms-user-select: none;
     user-select: none;
+    box-shadow: 0 0 4px #999;
 }
 
 .datepicker-container > div {
@@ -23,13 +28,16 @@
 .datepicker-container table {
     margin: 0;
     padding: 0;
+    height: 257px;
+    position: relative;
+    width: 100%;
 }
 
 .date-container td {
     background-color: #FFF;
     color: #314559;
-    height: 28px;
-    width: 28px;
+    height: 36px;
+    width: 36px;
     border-left: 1px solid #efdbd6;
     border-bottom: 1px solid #efdbd6;
     vertical-align: middle;
@@ -38,6 +46,9 @@
 .date-container .year {
     font-weight: bold;
     cursor: defualt;
+    border: none;
+    border-bottom: 1px solid #efdbd6;
+    font-size: 14px;
 }
 
 .date-container tr:first-child td {
@@ -62,23 +73,23 @@
 .date-container .disabled,
 .date-container .disabled:hover,
 .date-container .disabled.selected {
-	background-color: #FFF;
-	color: #E0E0E0;
-	cursor: default;
+    background-color: #FFF;
+    color: #E0E0E0;
+    cursor: default;
 }
 
 .time-container {
     vertical-align: top;
-    margin: 6px 6px 0 10px;
+    width: 200px;
 }
 .time-container .stepper {
     text-align: center;
     padding: 4px;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 12px;
     cursor: pointer;
-    background: rgb(74, 104, 119);
-    color: rgb(154, 186, 190);    
+    background: rgb(255, 255, 255);
+    color: rgb(143, 200, 238);    
+    vertical-align: top;
 }
 
 .time-container .stepper:active,
@@ -87,23 +98,25 @@
 }
 
 .time-container td {
-    min-width: 10px;
+    vertical-align: middle;
+    text-align: center;
 }
 
 .time-container .minutes-container {
     position: relative;
+    padding-right: 10px;
 }
 
 .time-container input {
     outline: none;
     border: none;
-    background: rgb(74, 104, 119);
     padding: 0 10px;
-    color: #BBB;
+    color: rgb(0, 0, 0);
     position: static;
-    width: 76px;
-    font-size: 68px;
-    letter-spacing: -7px;
+    width: 46px;
+    font-size: 38px;
+    border-top: 3px solid rgb(216, 238, 255);
+    border-bottom: 3px solid rgb(216, 238, 255);
 }
 
 .time-container input:focus {
@@ -116,15 +129,14 @@
     padding: 4px;
     padding-bottom: 16px;
     vertical-align: bottom;
-    color: #FFF;
+    color: rgb(0, 0, 0);
     position: absolute;
     font-weight: normal;
     right: 0;
-    bottom: 0;
+    bottom: 12px;
 }
 
 .time-container input[name=minutes] {
-    padding-right: 30px;
 }
 
 .time-container .military-format input[name=minutes] {
@@ -134,10 +146,22 @@
 .time-container button {
     font-size: 18px;
     color: #666;
-    background: #cfe7fa;
+    background: rgb(235, 235, 235);
     border: 0 solid;
-    width: 100%;
-    padding: 10px 0 9px 0;
+    width: 50%;
+    padding: 10px;
     cursor: pointer;
+    position: absolute;
+    bottom: -1px;
+    right: 0;
 }
 
+.date-container .year + td {
+    border-left: none;
+}
+.date-container {
+    border-right: 1px solid #efdbd6;
+}
+.time-container tr:first-child .stepper {
+    vertical-align: bottom;
+}
