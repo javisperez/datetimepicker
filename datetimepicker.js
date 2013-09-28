@@ -319,76 +319,75 @@
                 var hours = ce('input');
                 var minutes = hours.cloneNode(true);
                 var currentDown = null;
-                var timepickerTimer = null;
 
-                document.onmouseup = function() {
-                    clearTimeout(timepickerTimer);
+                function fastSeekTime() {
+                    isMouseDown = true;
+
+                    navTimer = setTimeout(updateTimeNav, 500);
                 }
 
                 function updateTimeNav() {
-                    switch (true) {
-                        case currentDown == tdPlus:
-                            var currentHour = hours.value;
-
-                            if(currentHour == 11 && options.timerFormat != 24) {
-                                var $amPm = $($self.data('timeContainer')).find('.amPm');
-                                var currentAmPm = $amPm.text();
-
-                                if(currentAmPm == 'am') {
-                                    currentAmPm = 'pm';
-                                } else {
-                                    currentAmPm = 'am';
-                                }
-
-                                $amPm.text(currentAmPm);
-                            }
-
-                            if(options.timerFormat != 24) {
-                                currentHour = currentHour == 12 ? 1 : +hours.value+1;
-                            } else {
-                                currentHour = currentHour == 23 ? 0 : +hours.value+1;
-                            }
-
-                            hours.value = pad(currentHour);
+                    switch (currentDown) {
+                        case tdPlus:
+                            updateHours(1);
                         break;
 
-                        case currentDown == tdMinus:
-                            var currentHour = hours.value;
-
-                            if(currentHour == 12 && options.timerFormat != 24) {
-                                var $amPm = $($self.data('timeContainer')).find('.amPm');
-                                var currentAmPm = $amPm.text();
-
-                                if(currentAmPm == 'am') {
-                                    currentAmPm = 'pm';
-                                } else {
-                                    currentAmPm = 'am';
-                                }
-
-                                $amPm.text(currentAmPm);
-                            }
-
-                            if(options.timerFormat != 24) {
-                                currentHour = currentHour == 1 ? 12 : +hours.value-1;
-                            } else {
-                                currentHour = currentHour == 0 ? 23 : +hours.value-1;
-                            }
-
-                            hours.value = pad(currentHour);
+                        case tdMinus:
+                            updateHours(-1);
                         break;
 
-                        case currentDown == tdPlusMinutes:
-                            currentMinute = minutes.value == 59 ? 0 : +minutes.value+1;
-                            minutes.value = pad(currentMinute);
+                        case tdPlusMinutes:
+                            updateMinutes(1);
                         break;
 
-                        case currentDown == tdMinusMinutes:
-                            currentMinute = minutes.value == 0 ? 59 : +minutes.value-1;
-                            minutes.value = pad(currentMinute);
+                        case tdMinusMinutes:
+                            updateMinutes(-1);
                         break;
                     }
 
-                    timepickerTimer = setTimeout(updateTimeNav, 100);
+                    navTimer = setTimeout(updateTimeNav, 50);
+                }
+
+                function updateMinutes(index) {
+                    if(index > 0) {
+                        var currentMinute = minutes.value == 59 ? 0 : +minutes.value + index;
+                    } else {
+                        var currentMinute = minutes.value == 0 ? 59 : +minutes.value + index;
+                    }
+                    minutes.value = pad(currentMinute);
+                }
+
+                function updateHours(index) {
+                    var currentHour = hours.value;
+
+                    if((currentHour == 11 && index > 0 || currentHour == 12 && index < 0) && options.timerFormat != 24) {
+                        var $amPm = $($self.data('timeContainer')).find('.amPm');
+                        var currentAmPm = $amPm.text();
+
+                        if(currentAmPm == 'am') {
+                            currentAmPm = 'pm';
+                        } else {
+                            currentAmPm = 'am';
+                        }
+
+                        $amPm.text(currentAmPm);
+                    }
+
+                    if(options.timerFormat != 24) {
+                        if(index > 0) {
+                            currentHour = currentHour == 12 ? 1 : +hours.value + index;
+                        } else {
+                            currentHour = currentHour == 1 ? 12 : +hours.value + index;
+                        }
+                    } else {
+                        if(index > 0) {
+                            currentHour = currentHour == 23 ? 0 : +hours.value + index;
+                        } else {
+                            currentHour = currentHour == 0 ? 23 : +hours.value + index;
+                        }
+                    }
+
+                    hours.value = pad(currentHour);
                 }
 
                 table.cellSpacing = 0;
@@ -414,23 +413,38 @@
 
                 tdPlus.onmousedown = function() {
                     currentDown = this;
-                    updateTimeNav();
+                    fastSeekTime();
                 }
 
                 tdMinus.onmousedown = function() {
                     currentDown = this;
-                    updateTimeNav();
+                    fastSeekTime();
                 }
-
 
                 tdPlusMinutes.onmousedown = function() {
                     currentDown = this;
-                    updateTimeNav();
+                    fastSeekTime();
                 }
 
                 tdMinusMinutes.onmousedown = function() {
                     currentDown = this;
-                    updateTimeNav();
+                    fastSeekTime();
+                }
+
+                tdPlus.onclick = function() {
+                    updateHours(1);
+                }
+
+                tdMinus.onclick = function() {
+                    updateHours(-1);
+                }
+
+                tdPlusMinutes.onclick = function() {
+                    updateMinutes(1);
+                }
+
+                tdMinusMinutes.onclick = function() {
+                    updateMinutes(-1);
                 }
 
                 tr.appendChild(tdPlus);
