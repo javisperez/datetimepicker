@@ -318,6 +318,78 @@
                 var td = ce('td');
                 var hours = ce('input');
                 var minutes = hours.cloneNode(true);
+                var currentDown = null;
+                var timepickerTimer = null;
+
+                document.onmouseup = function() {
+                    clearTimeout(timepickerTimer);
+                }
+
+                function updateTimeNav() {
+                    switch (true) {
+                        case currentDown == tdPlus:
+                            var currentHour = hours.value;
+
+                            if(currentHour == 11 && options.timerFormat != 24) {
+                                var $amPm = $($self.data('timeContainer')).find('.amPm');
+                                var currentAmPm = $amPm.text();
+
+                                if(currentAmPm == 'am') {
+                                    currentAmPm = 'pm';
+                                } else {
+                                    currentAmPm = 'am';
+                                }
+
+                                $amPm.text(currentAmPm);
+                            }
+
+                            if(options.timerFormat != 24) {
+                                currentHour = currentHour == 12 ? 1 : +hours.value+1;
+                            } else {
+                                currentHour = currentHour == 23 ? 0 : +hours.value+1;
+                            }
+
+                            hours.value = pad(currentHour);
+                        break;
+
+                        case currentDown == tdMinus:
+                            var currentHour = hours.value;
+
+                            if(currentHour == 12 && options.timerFormat != 24) {
+                                var $amPm = $($self.data('timeContainer')).find('.amPm');
+                                var currentAmPm = $amPm.text();
+
+                                if(currentAmPm == 'am') {
+                                    currentAmPm = 'pm';
+                                } else {
+                                    currentAmPm = 'am';
+                                }
+
+                                $amPm.text(currentAmPm);
+                            }
+
+                            if(options.timerFormat != 24) {
+                                currentHour = currentHour == 1 ? 12 : +hours.value-1;
+                            } else {
+                                currentHour = currentHour == 0 ? 23 : +hours.value-1;
+                            }
+
+                            hours.value = pad(currentHour);
+                        break;
+
+                        case currentDown == tdPlusMinutes:
+                            currentMinute = minutes.value == 59 ? 0 : +minutes.value+1;
+                            minutes.value = pad(currentMinute);
+                        break;
+
+                        case currentDown == tdMinusMinutes:
+                            currentMinute = minutes.value == 0 ? 59 : +minutes.value-1;
+                            minutes.value = pad(currentMinute);
+                        break;
+                    }
+
+                    timepickerTimer = setTimeout(updateTimeNav, 100);
+                }
 
                 table.cellSpacing = 0;
                 table.cellPadding = 0;
@@ -340,68 +412,25 @@
                 minutes.name = 'minutes';
                 minutes.value = pad(currentMinute);
 
-                tdPlus.onclick = function() {
-                    var currentHour = hours.value;
-
-                    if(currentHour == 11 && options.timerFormat != 24) {
-                        var $amPm = $($self.data('timeContainer')).find('.amPm');
-                        var currentAmPm = $amPm.text();
-
-                        if(currentAmPm == 'am') {
-                            currentAmPm = 'pm';
-                        } else {
-                            currentAmPm = 'am';
-                        }
-
-                        $amPm.text(currentAmPm);
-                    }
-
-                    if(options.timerFormat != 24) {
-                        currentHour = currentHour == 12 ? 1 : +hours.value+1;
-                    } else {
-                        currentHour = currentHour == 23 ? 0 : +hours.value+1;
-                    }
-
-                    hours.value = pad(currentHour);
+                tdPlus.onmousedown = function() {
+                    currentDown = this;
+                    updateTimeNav();
                 }
 
-                tdMinus.onclick = function() {
-
-                    var currentHour = hours.value;
-
-                    if(currentHour == 12 && options.timerFormat != 24) {
-                        var $amPm = $($self.data('timeContainer')).find('.amPm');
-                        var currentAmPm = $amPm.text();
-
-                        if(currentAmPm == 'am') {
-                            currentAmPm = 'pm';
-                        } else {
-                            currentAmPm = 'am';
-                        }
-
-                        $amPm.text(currentAmPm);
-                    }
-
-                    if(options.timerFormat != 24) {
-                        currentHour = currentHour == 1 ? 12 : +hours.value-1;
-                    } else {
-                        currentHour = currentHour == 0 ? 23 : +hours.value-1;
-                    }
-
-                    hours.value = pad(currentHour);
+                tdMinus.onmousedown = function() {
+                    currentDown = this;
+                    updateTimeNav();
                 }
 
 
-                tdPlusMinutes.onclick = function() {
-                    currentMinute = minutes.value == 59 ? 0 : +minutes.value+1;
-
-                    minutes.value = pad(currentMinute);
+                tdPlusMinutes.onmousedown = function() {
+                    currentDown = this;
+                    updateTimeNav();
                 }
 
-                tdMinusMinutes.onclick = function() {
-                    currentMinute = minutes.value == 0 ? 59 : +minutes.value-1;
-
-                    minutes.value = pad(currentMinute);
+                tdMinusMinutes.onmousedown = function() {
+                    currentDown = this;
+                    updateTimeNav();
                 }
 
                 tr.appendChild(tdPlus);
@@ -514,7 +543,7 @@
             document.body.appendChild( build() );
 
             // On focus display the calendar
-            $self.focus(function(){
+            $self.on('focus click', function(){
                 show();
             });
 
